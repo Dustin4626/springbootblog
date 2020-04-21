@@ -1,4 +1,4 @@
-package com.dustin.springbootblog.controller;
+package com.dustin.springbootblog.handler;
 
 import javax.servlet.http.HttpServletRequest;
 
