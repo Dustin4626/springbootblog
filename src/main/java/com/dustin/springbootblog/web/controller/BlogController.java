@@ -11,9 +11,22 @@ public class BlogController {
 	private static final Logger log = LoggerFactory.getLogger(BlogController.class);
 	
 	@GetMapping("/index")
-	@ResponseBody
+//	@ResponseBody
 	public String index() {
 		log.info("show index");
+//      int i = 9/0;
+//      String blog = null;
+//      if (blog == null) {
+//    	  /**
+//    	   *  	1.需要對應 class NotFoundException 上的annotation @ResponseStatus(HttpStatus.NOT_FOUND)
+//    	   *  	
+//    	   *  	2.然後 class GlobalDefaultExceptionHandler 須加上
+//    	   *  	if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null)
+//					throw e;
+//				才會攔截到錯誤訊息,轉到404.html
+//    	   */
+//          throw  new NotFoundException("博客不存在");
+//      }
 		return "index";
 	}
 	
