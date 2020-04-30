@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -36,5 +38,16 @@ public class BlogController {
 		log.info("show req");
 		int i = 1/0;
 		return "show";
+	}
+	
+	@PostMapping("/contact")
+	@ResponseBody
+	public String contact(
+			@RequestParam String email,
+			@RequestParam String subject,
+			@RequestParam String message) {
+		System.out.println(email+","+subject+","+message);
+		log.info("show req");
+		return email+","+subject+","+message;
 	}
 }
