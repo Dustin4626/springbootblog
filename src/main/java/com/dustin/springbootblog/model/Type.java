@@ -1,8 +1,17 @@
 package com.dustin.springbootblog.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 
 /**
@@ -16,8 +25,10 @@ public class Type implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private BigDecimal id;
 
+	@NotBlank(message = "分類名稱不能為空白")
 	private String name;
 
 	//bi-directional many-to-one association to Blog
@@ -27,11 +38,17 @@ public class Type implements Serializable {
 	public Type() {
 	}
 
-	public String getId() {
+	public Type(BigDecimal id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+	public BigDecimal getId() {
 		return this.id;
 	}
 
-	public void setId(String id) {
+	public void setId(BigDecimal id) {
 		this.id = id;
 	}
 

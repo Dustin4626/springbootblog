@@ -25,6 +25,11 @@ public class LoginController {
 		return "admin/login";
 	}
 	
+	@GetMapping("/index")
+	public String adminIndexPage() {
+		return "admin/dashboard";
+	}
+	
 	@PostMapping("/login")
 	public String login(@RequestParam String username,
 						@RequestParam String password,
@@ -35,7 +40,7 @@ public class LoginController {
 		if(user != null) {
 			user.setPassword(null);
 			session.setAttribute("user", user);
-			return "redirect:/index";
+			return "redirect:/admin/index";
 		} else {
 			attributes.addFlashAttribute("message", "用戶名和密碼錯誤");
 			return "redirect:/admin";
@@ -47,6 +52,5 @@ public class LoginController {
 		session.removeAttribute("user");
 		return "redirect:/admin";
 	}
-
 	
 }
