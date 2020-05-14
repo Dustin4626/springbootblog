@@ -37,7 +37,12 @@ public class Type implements Serializable {
 
 	public Type() {
 	}
-
+	
+	public Type(String name) {
+		super();
+		this.name = name;
+	}
+	
 	public Type(BigDecimal id, String name) {
 		super();
 		this.id = id;

@@ -33,9 +33,11 @@
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 
 			<h2>標籤管理</h2>
-
+			<a href="#" th:href="@{/admin/types/input}" class="btn btn-outline-dark">新增</a>
+<!-- 			<a href="#" th:href="@{/admin/types/downloadExcel(page=${types.number})}" class="btn btn-outline-dark">匯出此頁標籤</a> -->
+			<a href="#" th:href="@{/admin/types/downloadExcel}" class="btn btn-outline-dark">匯出此頁標籤</a>
 			<div th:unless="${#strings.isEmpty(message)}" class="alert alert-primary alert-dismissible fade show" role="alert">
-				<strong>恭喜!</strong> [[${message}]].
+				[[${message}]]
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -50,15 +52,68 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="type : ${types}">
+						<tr th:each="type : ${type}">
 							<td th:text="${type.id}">id</td>
 							<td th:text="${type.name}">name</td>
 							<td><a href="#" th:href="@{/admin/types/{id}/input(id=${type.id})}" class="btn btn-outline-dark">編輯</a> 
 							<a href="#" th:href="@{/admin/types/{id}/delete(id=${type.id})}" class="btn btn-outline-dark">刪除</a></td>
 						</tr>
 					</tbody>
+					<tfoot>
+			          <tr>
+			            <th>
+			           	 	<ul class="pagination" th:if="${type.totalPages}>1">
+							    <li class="page-item"><a th:href="@{/admin/types(page=${type.number}-1)}" class="page-link" th:unless="${type.first}">上一頁</a></li>
+<!-- 							    <li class="page-item"><a class="page-link" href="#">1</a></li> -->
+<!-- 							    <li class="page-item"><a class="page-link" href="#">2</a></li> -->
+<!-- 							    <li class="page-item"><a class="page-link" href="#">3</a></li> -->
+							    <li class="page-item"><a th:href="@{/admin/types(page=${type.number}+1)}" class="page-link" th:unless="${type.last}">下一頁</a></li>
+							 </ul>
+			            </th>
+			          </tr>
+			        </tfoot>
 				</table>
-				<a href="#" th:href="@{/admin/types/input}" class="btn btn-outline-dark">新增</a>
+
+<!-- 				types pagination -->
+<!-- 				<nav aria-label="Pagination" th:if="${types.totalPages gt 0}"> -->
+<!-- 				    <ul class="pagination justify-content-center font-weight-medium"> -->
+<!-- 				        <li class="page-item" th:classappend="${types.number eq 0} ? 'disabled'"> -->
+<!-- 				            <a class="page-link svg-icon" -->
+<!-- 				               th:href="@{/admin/types?page={id}(id=${types.number lt 2 ? 1 : types.number})}" -->
+<!-- 				               aria-label="Previous" -->
+<!-- 				               title="Previous Page" rel="tooltip"> -->
+<!-- 				                <span aria-hidden="true" data-feather="chevrons-left" width="20" height="20"></span> -->
+<!-- 				            </a> -->
+<!-- 				        </li> -->
+<!-- 				        <li class="page-item" th:classappend="${i eq types.number + 1} ? 'active'" -->
+<!-- 				            th:each="i : ${#numbers.sequence( types.number + 1, types.totalPages > 10 + types.number ? types.number + 10 : types.totalPages, 1)}"> -->
+<!-- 				            <a class="page-link" th:href="@{/admin/types?page={id}(id=${i})}" th:text="${i}" -->
+<!-- 				               th:title="${'Page '+ i}" -->
+<!-- 				               rel="tooltip"></a> -->
+<!-- 				        </li> -->
+<!-- 				        <li class="page-item disabled" th:if="${types.number + 10 < types.totalPages}"> -->
+<!-- 				            <a class="page-link svg-icon" href="#"> -->
+<!-- 				                <span data-feather="more-horizontal" width="20" height="20"></span> -->
+<!-- 				            </a> -->
+<!-- 				        </li> -->
+<!-- 				        <li class="page-item" th:classappend="${types.number + 1 eq types.totalPages} ? 'disabled'"> -->
+<!-- 				            <a class="page-link svg-icon" th:href="@{/admin/types?page={id}(id=${types.number + 2})}" -->
+<!-- 				               aria-label="Next" -->
+<!-- 				               title="Next Page" rel="tooltip"> -->
+<!-- 				                <span aria-hidden="true" data-feather="chevrons-right" width="20" height="20"></span> -->
+<!-- 				            </a> -->
+<!-- 				        </li> -->
+<!-- 				    </ul> -->
+<!-- 				</nav> -->
+
+
+				<form th:action="@{/admin/types/uploadExcel}" method="post" enctype="multipart/form-data">
+				  <div class="form-group">
+				    <label for="exampleFormControlFile1">匯入標籤</label>
+				    <input type="file" name="file" accept=".xls,.xlsx" class="form-control-file" id="exampleFormControlFile1">
+				    <input type="submit">
+				  </div>
+				</form>
 			</div>
 			</main>
 		</div>
