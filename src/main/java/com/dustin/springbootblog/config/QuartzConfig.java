@@ -25,7 +25,7 @@ public class QuartzConfig {
 	public JobDetailFactoryBean jobDetailFactoryBean() {
 		JobDetailFactoryBean factory = new JobDetailFactoryBean();
 		// 關聯自己的Job類
-		factory.setJobClass(QuartzSpringJob2.class);
+		factory.setJobClass(QuartzSpringJob.class);
 		
 		return factory;
 	}
