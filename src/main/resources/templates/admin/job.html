@@ -1,0 +1,213 @@
+<!docjob html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<title>job Template</title>
+
+<script type="text/javascript">
+		function editWin(cron,jid,Ap,jName){
+			jobId = jid;
+			runAp = Ap;
+			$.ajax({
+				url: "../admin/job/editWin",
+				dataType: "json",
+				data:{cron : cron},
+				type: "POST",
+		// 		headers: {'RequestVerficationToken': GetAntiForgeryToken()},
+				error: function(XMLHttpRequest, textStatus, errorThrown) { alert('伺服器連結錯誤'); },
+				beforeSend: function() {
+// 					$.blockUI({ message: waitHtml() });
+				},
+				complete: function() {
+// 					$.unblockUI();
+				},
+				success: function(data, textStatus) {
+					$('input[type=text]').attr("disabled",false);
+		       		if (data.data != null)	{
+		       			
+		       			// 顯示 Bootstrap's Modal 視窗
+						openModalWin("#editDialog");
+// 		       			openDialog("edit","修改作業");
+		       			
+		       			$().j2fwn(data.data, "editWin", "edit_");
+		       			setSpanHtml(data.data, "editWin", "span_");
+		       			$("#editTitle").html(jName);
+		       			$("#modifyPageBt").show();
+		       			$("#saveBt").hide();
+		       			$("#clnBt").hide();
+		       			$("#mesConfirm").text("");
+					}
+				}
+		    });		
+		}
+
+		//驗證修改內容
+		function modifyPage(){
+			resetValid("editForm");
+			if($("#editForm").validate().form()){
+				var shh = Number($("#edit_startHH").val());
+				var ehh = Number($("#edit_endHH").val());
+				var smm = Number($("#edit_startMM").val());
+				var interval = Number($("#edit_interval").val());
+				
+				/*$('#modifyPageBt').bind('click', function() {
+					$('input').attr("disabled",true);
+				});*/
+				$('input[type=text]').attr("disabled",true);
+				
+				if(shh >= ehh && ehh != 0) {
+					$("#mesConfirm").text("結束時間不得小於開始時間,取消重新輸入");
+				} else if( ehh == 0 && interval > 0) {
+					$("#mesConfirm").text("結束時間未設定，不得設定執行間隔");
+				} else if((smm + interval) >= 60 ) {
+					$("#mesConfirm").text("開始時間分與執行間隔相加不得大於59");
+				} else {
+					$("#saveBt").show();
+					$("#mesConfirm").text("確定修改時程?");
+				}
+				
+				$("#clnBt").show();
+				$("#mesConfirm").show();
+				$("#modifyPageBt").hide();
+			}
+		}
+
+		//取消修改
+		function modify2View(){
+			resetValid("editForm");
+			$('input[type=text]').attr("disabled",false);
+			$("#saveBt").hide();
+			$("#clnBt").hide();
+			$("#mesConfirm").text("").prepend("&nbsp;&nbsp;&nbsp;");
+			$("#edit_startHH").val($("#span_startHH").html());
+			$("#edit_startMM").val($("#span_startMM").html());
+			$("#edit_endHH").val($("#span_endHH").html());
+			$("#edit_interval").val($("#span_interval").html());
+			$("#modifyPageBt").show();
+			
+		}
+</script>
+</head>
+<body>
+
+	<nav th:replace="~{admin/_layout :: navbar}">..</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<nav th:replace="~{admin/_layout :: sidebar(active='job.html')}"></nav>
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+
+			<h2>排程管理</h2>
+			<a href="#" th:href="@{/admin/job/input}" class="btn btn-outline-dark">新增排程</a>
+			<div th:unless="${#strings.isEmpty(message)}" class="alert alert-primary alert-dismissible fade show" role="alert">
+				[[${message}]]
+				<button job="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+			<div class="table-responsive">
+				<table class="table table-striped table-sm">
+					<thead>
+						<tr>
+							<th>排程名稱</th>
+							<th>排程執行時段</th>
+							<th>上次排程執行時間</th>
+							<th>上次排程執行結果</th>
+							<th>排程狀態</th>
+							<th>執行機器</th>
+							<th>操作</th>
+							<th>重送</th>
+							<th>修改</th>
+							<th>刪除</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="job : ${job}">
+<!-- 							<td th:text="${job.jobId}">id</td> -->
+							<td th:text="${job.jobName}">jobName</td>
+							<td th:text="${job.quartzCronText}">quartzCronText</td>
+<!-- 							<td th:text="${job.quartzCron}">quartzCronText</td> -->
+							<td th:text="${job.firedDate}">firedDate</td>
+							<td th:text="${job.firedDesc}">firedDesc</td>
+							<td th:text="${job.remark}">remark</td>
+							<td th:text="${job.runAp}">執行機器</td>
+							<td>	
+								<a href="#" onclick="startJob()" class="btn btn-outline-dark" th:if="${job.remark == 'ACTIVE' }">暫停</a>
+								<a href="#" onclick="startJob()" class="btn btn-outline-dark" th:unless="${job.remark == 'ACTIVE' }">啟動</a>
+							</td>
+							<td><a href="#" onclick="startJobOnce()" class="btn btn-outline-dark">重送</a></td>
+							<td><a href="#" th:onclick="editWin([[${job.quartzCron}]],[[${job.jobId}]],[[${job.runAp}]],[[${job.jobName}]])" class="btn btn-outline-dark">修改</a></td>
+							<td><a href="#" th:href="@{/admin/job/{id}/delete(id=${job.jobId})}" class="btn btn-outline-dark">刪除</a></td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th>
+								<ul class="pagination" th:if="${job.totalPages}>1">
+									<li class="page-item"><a th:href="@{/admin/job(page=${job.number}-1)}" class="page-link" th:unless="${job.first}">上一頁</a></li>
+									<li class="page-item"><a th:href="@{/admin/job(page=${job.number}+1)}" class="page-link" th:unless="${job.last}">下一頁</a></li>
+								</ul>
+							</th>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			</main>
+		</div>
+	</div>
+
+	<!-- 修改 -->
+	<div class="modal" id="editDialog" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="editTitle">排程時段修改</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form role="form" method="POST" id="editForm" action="">
+					<div class="modal-body" id="editWin">
+						<input type="hidden" name="_token" value="">
+						<div class="form-group">
+							<label class="control-label">批次執行開始時間：</label>
+							<div class="col-sm-12 row">
+								<span id="span_startHH" style="display:none"></span>
+								<input type="text" class="form-control col-sm-2" id="edit_startHH" name="edit_startHH">&nbsp;時&nbsp;
+								<span id="span_startMM" style="display:none"></span>
+								<input type="text" class="form-control col-sm-2" id="edit_startMM" name="edit_startMM">&nbsp;分&nbsp;
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label">批次執行結束時間：</label>
+							<div class="col-sm-12 row">
+								<span id="span_endHH" style="display:none"></span>
+								<input type="text" class="form-control col-sm-2" id="edit_endHH" name="edit_endHH">&nbsp;時
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label">批次執行間隔：</label>
+							<div class="col-sm-12 row">
+								<span id="span_interval" style="display:none"></span>
+								<input type="text" class="form-control col-sm-2" id="edit_interval" name="edit_interval">&nbsp;分
+							</div>
+						</div>
+						<div class="form-group ">
+							<label style="text-align:center;" class="col-sm-12 control-label"><span id="mesConfirm" style="color: red;">&nbsp;&nbsp;&nbsp;</span></label>													
+						</div> 
+						<div class="form-group">
+							<input type="button" class="btn btn-primary" id="modifyPageBt" value="Save changes" onclick="modifyPage();" />
+							<input type="button" class="btn btn-primary" id="saveBt" style="display:none" value="確定" onclick="saveModify();" />
+							<input type="button" class="btn btn-primary" id="clnBt" style="display:none" value="取消" onclick="modify2View();" />
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<th:block th:replace="admin/_layout :: script"></th:block>
+</body>
+</html>

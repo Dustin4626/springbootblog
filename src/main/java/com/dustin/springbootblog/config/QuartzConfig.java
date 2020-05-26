@@ -14,7 +14,7 @@ import com.dustin.springbootblog.schedule.QuartzSpringJob2;
  * spring Quartz 配置類
  *
  */
-@Configuration
+//@Configuration
 public class QuartzConfig {
 
 	@Autowired

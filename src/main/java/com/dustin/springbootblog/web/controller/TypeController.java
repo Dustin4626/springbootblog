@@ -61,6 +61,7 @@ public class TypeController {
 			Model model) {
 		System.out.println(pageable);
 		Page<Type> types = service.listType(pageable);
+		System.out.println(types.toList());
 		model.addAttribute("type",types);
 //		model.addAttribute("types", service.findAll());
 		return "admin/type";
