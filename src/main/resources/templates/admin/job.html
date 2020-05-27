@@ -1,4 +1,4 @@
-<!docjob html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
@@ -93,13 +93,15 @@
 <body>
 
 	<nav th:replace="~{admin/_layout :: navbar}">..</nav>
-	<div class="container-fluid">
+	<div class="container">
 		<div class="row">
 			<nav th:replace="~{admin/_layout :: sidebar(active='job.html')}"></nav>
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 
 			<h2>排程管理</h2>
-			<a href="#" th:href="@{/admin/job/input}" class="btn btn-outline-dark">新增排程</a>
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editDialog" data-whatever="@mdo">修改排程</button>
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">新增排程</button>
+<!-- 			<a href="#" th:href="@{/admin/job/input}" class="btn btn-outline-dark">新增排程</a> -->
 			<div th:unless="${#strings.isEmpty(message)}" class="alert alert-primary alert-dismissible fade show" role="alert">
 				[[${message}]]
 				<button job="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -208,6 +210,48 @@
 			</div>
 		</div>
 	</div>
+<!-- 	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button> -->
+
+	
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">新增排程</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">排程名稱:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+          
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Message:</label>
+           <input type="text" class="form-control" id="recipient-name">
+          </div>
+          
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Message:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+          
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Message:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send message</button>
+      </div>
+    </div>
+  </div>
+</div>
 	<th:block th:replace="admin/_layout :: script"></th:block>
 </body>
 </html>
