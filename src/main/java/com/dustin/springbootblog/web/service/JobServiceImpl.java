@@ -72,12 +72,26 @@ public class JobServiceImpl extends BaseService<SysScheduler,Long> implements Jo
 //	}
 
 	@Override
-	public Page<SysSchedulerFiredList> jobIndexListAll(Pageable pageable) {
+	public Page<SysSchedulerFiredList> jobIndexListAll(Pageable pageable) throws Exception {
 		
-		GenericService defaultSev = defaultSev();
+		GenericService defaultSev = defaultSev(SysSchedulerFiredList.class);
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append(" SELECT A.JOB_ID jobId, A.JOB_NAME jobName, A.RUN_AP runAp, A.QUARTZ_CRON quartzCron, A.REMARK remark ");
+		sb.append(" , B.FIRED_DATE firedDate, B.FIRED_DESC firedDesc ");
+		sb.append(" FROM SYS_SCHEDULER A ");
+		sb.append(" LEFT JOIN SYS_LOG_SCHEDULER_FIRED B ON B.JOB_ID = A.JOB_ID ");
+		sb.append(" ,( SELECT  JOB_ID ,max(ID) ID FROM  SYS_LOG_SCHEDULER_FIRED GROUP BY JOB_ID) C ");
+		sb.append(" WHERE B.ID IS NULL OR B.ID = C.id AND B.JOB_ID = C.JOB_ID ");
+		sb.append(" GROUP BY  A.JOB_ID, A.JOB_NAME, A.RUN_AP, ");
+		sb.append(" A.QUARTZ_CRON, A.REMARK, B.FIRED_DATE, ");
+		sb.append(" B.FIRED_DESC,A.VERSION  ORDER BY A.VERSION ");
+//		return defaultSev.findSQL4Pagin(sb.toString(),"",pageable);
 //		dao.jobIndexListAll(pageable);
-//		return defaultSev.findSQL4Pagin(sql, alies, pageable);
+		return defaultSev.findSQL4Pagin(sb.toString(), pageable);
 //		return dao.jobIndexListAll(pageable);
+		
+		
 	}
 	
 	public List<SysScheduler> listAll() {

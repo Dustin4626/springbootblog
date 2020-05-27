@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -153,10 +154,12 @@ public class GenericService<T, ID extends Serializable> {
 		return pageCounts;
 	}
 	
-	public void setupPage(Page pagin,int totalRows){
+	public void setupPage(Pageable pagin,int totalRows){
 //		Pageable pageable = PageRequest.of(0,5);
 //		
 //		int currentPage = pagin.page;
+		int offset = (int) pagin.getOffset();
+		
 //		int pageRows = pagin.getPageRows();
 //		//計算頁數
 //		int pageCounts = calculatePageCounts(totalRows,pageRows);
@@ -217,6 +220,13 @@ public class GenericService<T, ID extends Serializable> {
 //		return dao.find4Pagin(hql, (pagin.getCurrentPage() - 1) * pagin.getPageRows(), pagin.getPageRows(),values);
 		return null;
 	}
+	
+	public Page<T> findSQL4Pagin(String sql,Pageable pageable)throws Exception {
+		int totalRows = dao.findNative4PaginTotal(sql).intValue();
+		setupPage(pageable,totalRows);
+		List<T> findNative4PaginList = dao.findNative4Pagin(sql, (int)pageable.getOffset(), pageable.getPageSize());
+		return new PageImpl(findNative4PaginList, pageable, totalRows);
+	}
 	/**
 	 * SQL查詢(分頁)
 	 * @param sql
@@ -225,13 +235,13 @@ public class GenericService<T, ID extends Serializable> {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<T> findSQL4Pagin(String sql,String alies,Page pagin)throws Exception {
-//		//總筆數
-//		int totalRows = dao.findNative4PaginTotal(sql).intValue();
-//		setupPage(pagin,totalRows);
-//		return dao.findNative4Pagin(sql, alies, (pagin.getCurrentPage() - 1) * pagin.getPageRows(), pagin.getPageRows());
-		return null;
-	}
+//	public List<T> findSQL4Pagin(String sql,String alies,Page pagin)throws Exception {
+////		//總筆數
+////		int totalRows = dao.findNative4PaginTotal(sql).intValue();
+////		setupPage(pagin,totalRows);
+////		return dao.findNative4Pagin(sql, alies, (pagin.getCurrentPage() - 1) * pagin.getPageRows(), pagin.getPageRows());
+//		return null;
+//	}
 	/**
 	 * SQL查詢(分頁)
 	 * @param sql

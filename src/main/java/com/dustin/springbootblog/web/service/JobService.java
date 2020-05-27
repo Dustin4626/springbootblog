@@ -27,7 +27,7 @@ public interface JobService {
 	 * @return
 	 */
 	Page<SysSchedulerFiredList> list(Pageable pageable) throws Exception;
-	Page<SysSchedulerFiredList> jobIndexListAll(Pageable pageable);
+	Page<SysSchedulerFiredList> jobIndexListAll(Pageable pageable) throws Exception;
 	List<SysScheduler> listAll();
 	Page<SysScheduler> listAll(Pageable pageable);
 

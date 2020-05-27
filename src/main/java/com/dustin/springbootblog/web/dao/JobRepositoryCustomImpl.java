@@ -19,10 +19,10 @@ import org.springframework.data.domain.Pageable;
 import com.dustin.springbootblog.model.SysScheduler;
 import com.dustin.springbootblog.model.SysSchedulerFiredList;
 
-public class JobRepositoryCustomImpl extends GenericDao<SysScheduler, BigDecimal> implements JobRepositoryCustom {
+public class JobRepositoryCustomImpl implements JobRepositoryCustom {
 
-//	@PersistenceContext
-//	private EntityManager entityManager;
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	public Page<SysSchedulerFiredList> jobIndexListAll1(Pageable pageable) {
 		StringBuffer sb = new StringBuffer();
@@ -35,8 +35,6 @@ public class JobRepositoryCustomImpl extends GenericDao<SysScheduler, BigDecimal
 		sb.append(" GROUP BY  A.JOB_ID, A.JOB_NAME, A.RUN_AP, ");
 		sb.append(" A.QUARTZ_CRON, A.REMARK, B.FIRED_DATE, ");
 		sb.append(" B.FIRED_DESC,A.VERSION  ORDER BY A.VERSION ");
-		
-		
 		return null;
 	}
 
@@ -73,6 +71,8 @@ public class JobRepositoryCustomImpl extends GenericDao<SysScheduler, BigDecimal
 
 	private Page<SysSchedulerFiredList> readPage(Query dataQuery, Query countQuery, Pageable pageable) {
 		int offset = (int) pageable.getOffset();
+		
+		System.out.println("pageable.getPageNumber()="+pageable.getPageNumber());
 		System.out.println("setFirstResult:pageable.getOffset()="+offset);
 		System.out.println("setMaxResults:pageable.getPageSize()="+pageable.getPageSize());
 		

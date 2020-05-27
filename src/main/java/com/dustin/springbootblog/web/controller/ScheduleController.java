@@ -27,14 +27,9 @@ public class ScheduleController {
 	@Autowired
 	private JobService jobService;
 	
-//	@GetMapping("job")
-//	public String index() {
-//		return "admin/job";
-//	}
-	
 	@GetMapping("/job")
 	public String jobList(
-			@PageableDefault(size = 2, direction = Direction.ASC) Pageable pageable,
+			@PageableDefault(size = 5, direction = Direction.ASC) Pageable pageable,
 			Model model) throws Exception {
 //		model.addAttribute("job",jobService.list(pageable));
 		model.addAttribute("job",jobService.jobIndexListAll(pageable));

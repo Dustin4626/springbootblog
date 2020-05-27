@@ -2,7 +2,6 @@ package com.dustin.springbootblog.web.dao;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -13,19 +12,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.query.internal.NativeQueryImpl;
 import org.hibernate.query.spi.NativeQueryImplementor;
 import org.hibernate.transform.Transformers;
+import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import com.dustin.springbootblog.model.SysSchedulerFiredList;
 
-
+@Repository
+@Scope("prototype")
 public class GenericDao<T, ID extends Serializable>{
 
 	protected Class<T> entityClass;
@@ -366,6 +364,23 @@ public class GenericDao<T, ID extends Serializable>{
 //	}
 	/**
 	 * SQL查詢(分頁)
+	 * @param sql 
+	 * @param first 
+	 * @param max
+	 * @return
+	 * @throws Exception
+	 */
+	public List<T> findNative4Pagin(final String sql, final int first, final int max) throws Exception {
+		NativeQueryImpl sqlQuery = (NativeQueryImpl) entityManager.createNativeQuery(sql);
+		sqlQuery.setResultTransformer(Transformers.aliasToBean(entityClass));
+		sqlQuery.setFirstResult(first);
+		sqlQuery.setMaxResults(max);
+		List<T> resultList = sqlQuery.getResultList();
+		return resultList;
+	}
+	
+	/**
+	 * SQL查詢(分頁)
 	 * @param sql
 	 * @param alies
 	 * @param first
@@ -373,12 +388,13 @@ public class GenericDao<T, ID extends Serializable>{
 	 * @return
 	 * @throws Exception
 	 */
-	public List<T> findNative4Pagin(final String sql,final String alies,final int first,final int max)throws Exception {
-		Query sqlQuery = entityManager.createNativeQuery(sql);
-		((NativeQueryImpl) sqlQuery).addEntity(alies, getEntityClass());
+	public List<T> findNative4Pagin(final String sql, final String alies, final int first, final int max) throws Exception {
+		NativeQueryImpl sqlQuery = (NativeQueryImpl) entityManager.createNativeQuery(sql);
+		sqlQuery.addEntity(alies, entityClass);
 		sqlQuery.setFirstResult(first);
 		sqlQuery.setMaxResults(max);
-		return sqlQuery.getResultList();
+		List<T> resultList = sqlQuery.getResultList();
+		return resultList;
 	}
 	/**
 	 * SQL查詢(分頁)
