@@ -94,16 +94,21 @@
 	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 	
 	<style>
-	.bd-placeholder-img {
-		font-size: 1.125rem;
-		text-anchor: middle;
-	}
-	
-	@media ( min-width : 768px) {
-		.bd-placeholder-img-lg {
-			font-size: 3.5rem;
+		.error {
+		  color: #F00;
+		  background-color: #FFF;
 		}
-	}
+		
+		.bd-placeholder-img {
+			font-size: 1.125rem;
+			text-anchor: middle;
+		}
+		
+		@media ( min-width : 768px) {
+			.bd-placeholder-img-lg {
+				font-size: 3.5rem;
+			}
+		}
 	</style>
 	<!-- Custom styles for this template -->
 	<link th:href="@{/css/dashboard.css}" rel="stylesheet">
@@ -117,6 +122,7 @@
 	<script th:src="@{/js/jquery.validate.js}"></script>
 	<script th:src="@{/js/utility.js}"></script>
 	<script th:src="@{/js/jquery.filedsToJson.js}"></script>
+	<script th:src="@{/js/messages_zh_TW.js}"></script>
 	
 	<!-- Icons -->
 	<script th:src="@{/js/feather.min.js}"></script>

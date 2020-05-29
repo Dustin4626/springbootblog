@@ -7,6 +7,47 @@
 <title>job Template</title>
 
 <script type="text/javascript">
+		function saveJob(){
+			if ($("#addJobWin").validate().form()) {
+				
+			
+				$.ajax({
+					url: "../admin/job",
+					dataType: "json",
+	// 				data:{cron : cron},
+					type: "POST",
+			// 		headers: {'RequestVerficationToken': GetAntiForgeryToken()},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+	// 					 alert('伺服器連結錯誤'); 
+						alert(XMLHttpRequest.responseText);
+					},
+					beforeSend: function() {
+			//				$.blockUI({ message: waitHtml() });
+					},
+					complete: function() {
+			//				$.unblockUI();
+					},
+					success: function(data, textStatus) {
+						$('input[type=text]').attr("disabled",false);
+			       		if (data.data != null)	{
+			       			
+			       			//	顯示 Bootstrap's Modal 視窗
+							openModalWin("#editDialog");
+							//	openDialog("edit","修改作業");
+			       			
+			       			$().j2fwn(data.data, "editWin", "edit_");
+			       			setSpanHtml(data.data, "editWin", "span_");
+			       			$("#editTitle").html(jName);
+			       			$("#modifyPageBt").show();
+			       			$("#saveBt").hide();
+			       			$("#clnBt").hide();
+			       			$("#mesConfirm").text("");
+						}
+					}
+			    });	
+			}	
+		}
+
 		function editWin(cron,jid,Ap,jName){
 			jobId = jid;
 			runAp = Ap;
@@ -99,8 +140,8 @@
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 
 			<h2>排程管理</h2>
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editDialog" data-whatever="@mdo">修改排程</button>
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">新增排程</button>
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editDialog" >修改排程</button>
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" >新增排程</button>
 <!-- 			<a href="#" th:href="@{/admin/job/input}" class="btn btn-outline-dark">新增排程</a> -->
 			<div th:unless="${#strings.isEmpty(message)}" class="alert alert-primary alert-dismissible fade show" role="alert">
 				[[${message}]]
@@ -212,46 +253,68 @@
 	</div>
 <!-- 	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button> -->
 
-	
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">新增排程</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">排程名稱:</label>
-            <input type="text" class="form-control" id="recipient-name">
-          </div>
-          
-          <div class="form-group">
-            <label for="message-text" class="col-form-label">Message:</label>
-           <input type="text" class="form-control" id="recipient-name">
-          </div>
-          
-          <div class="form-group">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <input type="text" class="form-control" id="recipient-name">
-          </div>
-          
-          <div class="form-group">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <textarea class="form-control" id="message-text"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
-      </div>
-    </div>
-  </div>
-</div>
+
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">新增排程</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="addJobWin">
+						<div class="form-group">
+							<label for="recipient-name" class="col-form-label">排程名稱:</label> 
+							<input type="text" class="form-control" id="recipient-name">
+						</div>
+
+						<div class="form-group">
+							<label for="message-text" class="col-form-label">job_id</label> 
+							<input type="text" class="form-control" id="recipient-name">
+						</div>
+
+						<div class="form-group">
+							<label for="message-text" class="col-form-label">job_classname</label>
+							<textarea class="form-control" id="message-text"></textarea>
+						</div>
+
+						<div class="form-group">
+							<label for="message-text" class="col-form-label">run_ap</label> 
+							<input type="text" class="form-control" id="recipient-name">
+						</div>
+						<div class="form-group">
+							<label class="control-label">批次執行開始時間：</label>
+							<div class="col-sm-12 row">
+								<span id="span_startHH" style="display: none"></span> 
+								<input type="text" class="form-control col-sm-2" id="edit_startHH" name="edit_startHH">&nbsp;時&nbsp; <span id="span_startMM" style="display: none"></span> 
+								<input type="text" class="form-control col-sm-2" id="edit_startMM" name="edit_startMM">&nbsp;分&nbsp;
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label">批次執行結束時間：</label>
+							<div class="col-sm-12 row">
+								<span id="span_endHH" style="display: none"></span> 
+								<input type="text" class="form-control col-sm-2" id="edit_endHH" name="edit_endHH">&nbsp;時
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label">批次執行間隔：</label>
+							<div class="col-sm-12 row">
+								<span id="span_interval" style="display: none"></span> 
+								<input type="text" class="form-control col-sm-2" id="edit_interval" name="edit_interval">&nbsp;分
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" onclick="saveJob();">Send</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<th:block th:replace="admin/_layout :: script"></th:block>
 </body>
 </html>

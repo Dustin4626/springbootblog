@@ -2,6 +2,8 @@ package com.dustin.springbootblog.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -29,12 +31,14 @@ public class SysScheduler implements Serializable {
 
 	private String flag;
 
+	@NotBlank(message = "類名不能為空")
 	@Column(name="JOB_CLASSNAME")
 	private String jobClassname;
 
 	@Column(name="JOB_ID")
 	private String jobId;
 
+	@NotBlank(message = "類名稱不能為空")
 	@Column(name="JOB_NAME")
 	private String jobName;
 
@@ -42,6 +46,7 @@ public class SysScheduler implements Serializable {
 	@Column(name="MODIFY_DATE")
 	private Date modifyDate;
 
+	@NotBlank(message = "cron表達式不能為空")
 	@Column(name="QUARTZ_CRON")
 	private String quartzCron;
 

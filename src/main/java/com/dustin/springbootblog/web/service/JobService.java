@@ -13,12 +13,13 @@ import com.dustin.springbootblog.model.SysSchedulerFiredList;
 
 public interface JobService {
 
-	/**
-	 * 添加並啟動定時任務
-	 * @param form
-	 * @throws Exception
-	 */
-	void addJob(JobForm form) throws Exception;
+//	/**
+//	 * 添加並啟動定時任務
+//	 * @param form
+//	 * @throws Exception
+//	 */
+//	void addJob(JobForm form) throws Exception;
+	void addJob(SysScheduler job) throws Exception;
 	
 	/**
 	 * 查詢定時任務列表

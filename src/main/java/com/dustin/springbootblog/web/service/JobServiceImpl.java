@@ -41,7 +41,11 @@ public class JobServiceImpl extends BaseService<SysScheduler,Long> implements Jo
 	}
 
 	@Override
-	public void addJob(JobForm form) throws Exception {
+	public void addJob(SysScheduler job) throws Exception {
+		dao.save(job);
+	}
+	
+	public void startJob(JobForm form) throws Exception {
 		Job newJob = (Job)Class.forName(form.getJobClassName()).newInstance();
 		
 		// 1.創建Job對象

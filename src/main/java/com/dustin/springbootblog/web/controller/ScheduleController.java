@@ -11,13 +11,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.dustin.springbootblog.model.ApiResponse;
 import com.dustin.springbootblog.model.JobForm;
 import com.dustin.springbootblog.model.QuartzCron;
+import com.dustin.springbootblog.model.SysScheduler;
 import com.dustin.springbootblog.web.service.JobService;
 
 @Controller
@@ -54,16 +59,21 @@ public class ScheduleController {
      * 保存定時任務
      */
     @PostMapping("/job")
-    public ResponseEntity<ApiResponse> addJob(JobForm form) {
-//    public ResponseEntity<ApiResponse> addJob(@Valid JobForm form) {
-        try {
-            jobService.addJob(form);
-        } catch (Exception e) {
-            return new ResponseEntity<>(ApiResponse.msg(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @ResponseBody
+	public ResponseEntity<ApiResponse> addJob(@Valid SysScheduler job) {
+//    public ResponseEntity<ApiResponse> addJob(@Valid SysScheduler job, Errors errors) {
+//		if (errors.hasErrors()) {
+//			return new ResponseEntity<>(ApiResponse.msg(errors.toString()), HttpStatus.BAD_REQUEST);
+//		}
+		try {
+			jobService.addJob(job);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(ApiResponse.msg(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
-        return new ResponseEntity<>(ApiResponse.msg("操作成功"), HttpStatus.CREATED);
-    }
+		return new ResponseEntity<>(ApiResponse.msg("操作成功"), HttpStatus.CREATED);
+	}
     
     @PostMapping("/delete/job")
     public ResponseEntity<ApiResponse> deleteJob(JobForm form){
