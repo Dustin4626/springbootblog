@@ -20,6 +20,7 @@ public interface JobService {
 //	 */
 //	void addJob(JobForm form) throws Exception;
 	void addJob(SysScheduler job) throws Exception;
+	void startJob(String jobId) throws Exception;
 	
 	/**
 	 * 查詢定時任務列表

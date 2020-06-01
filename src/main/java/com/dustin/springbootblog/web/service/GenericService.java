@@ -73,6 +73,15 @@ public class GenericService<T, ID extends Serializable> {
 	public List<T> find(String queryString)  {
 		return dao.find(queryString,new Object[0]);
 	}
+	
+	/**
+	 * 新增
+	 * @param entity
+	 */
+	public void save(T entity) {
+		dao.save(entity);
+	}
+	
 	/**
 	 * 新增或儲存(多筆)
 	 * @param entities

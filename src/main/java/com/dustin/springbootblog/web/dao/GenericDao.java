@@ -110,6 +110,13 @@ public class GenericDao<T, ID extends Serializable>{
 		}
 	}
 	
+	/**
+	 * 新增
+	 */
+	public void save(T entity) {
+		entityManager.persist(entity);
+	}
+	
 
 	/**
 	 * SQL查詢

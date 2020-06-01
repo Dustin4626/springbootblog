@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.dustin.springbootblog.model.SysScheduler;
 
 @Repository
-public interface JobRepository extends JpaRepository<SysScheduler, BigDecimal>, JobRepositoryCustom {
+public interface JobRepository extends JpaRepository<SysScheduler, BigDecimal> {
 
 // option method
 	static String LIST_QUERY = " FROM SYS_SCHEDULER A "
@@ -30,5 +30,7 @@ public interface JobRepository extends JpaRepository<SysScheduler, BigDecimal>, 
 //			, countQuery = "select count(A.JOB_ID) " + LIST_QUERY
 			, nativeQuery = true)
 	Page<Map<String, String>> list(Pageable pageable);
+	
+	public SysScheduler findByJobId(String jobId);
 	
 }

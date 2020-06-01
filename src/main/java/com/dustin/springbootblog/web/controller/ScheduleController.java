@@ -67,6 +67,7 @@ public class ScheduleController {
 //		}
 		try {
 			jobService.addJob(job);
+		
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return new ResponseEntity<>(ApiResponse.msg(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -75,14 +76,35 @@ public class ScheduleController {
 		return new ResponseEntity<>(ApiResponse.msg("操作成功"), HttpStatus.CREATED);
 	}
     
-    @PostMapping("/delete/job")
-    public ResponseEntity<ApiResponse> deleteJob(JobForm form){
-    	if(StringUtils.isEmpty(form.getJobGroupName())||StringUtils.isEmpty(form.getJobClassName())) {
-    		return new ResponseEntity<>(ApiResponse.msg("參數不能為空"), HttpStatus.BAD_REQUEST);
-    	}
-    	jobService.deleteJob(form);
-        return new ResponseEntity<>(ApiResponse.msg("删除成功"), HttpStatus.OK);
-    }
+    /**
+     * 保存定時任務
+     */
+    @PostMapping("/startJob")
+    @ResponseBody
+	public ResponseEntity<ApiResponse> startJob(String jobId) {
+//    public ResponseEntity<ApiResponse> addJob(@Valid SysScheduler job, Errors errors) {
+//		if (errors.hasErrors()) {
+//			return new ResponseEntity<>(ApiResponse.msg(errors.toString()), HttpStatus.BAD_REQUEST);
+//		}
+		try {
+			jobService.startJob(jobId);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(ApiResponse.msg(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		return new ResponseEntity<>(ApiResponse.msg("操作成功"), HttpStatus.CREATED);
+	}
+    
+    
+//    @PostMapping("/delete/job")
+//    public ResponseEntity<ApiResponse> deleteJob(JobForm form){
+//    	if(StringUtils.isEmpty(form.getJobGroupName())||StringUtils.isEmpty(form.getJobClassName())) {
+//    		return new ResponseEntity<>(ApiResponse.msg("參數不能為空"), HttpStatus.BAD_REQUEST);
+//    	}
+//    	jobService.deleteJob(form);
+//        return new ResponseEntity<>(ApiResponse.msg("删除成功"), HttpStatus.OK);
+//    }
 	
 	
 //	@GetMapping("job")

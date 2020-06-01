@@ -19,6 +19,7 @@ public class SysScheduler implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
 	@Temporal(TemporalType.DATE)
@@ -46,7 +47,7 @@ public class SysScheduler implements Serializable {
 	@Column(name="MODIFY_DATE")
 	private Date modifyDate;
 
-	@NotBlank(message = "cron表達式不能為空")
+//	@NotBlank(message = "cron表達式不能為空")
 	@Column(name="QUARTZ_CRON")
 	private String quartzCron;
 

@@ -9,17 +9,22 @@
 <script type="text/javascript">
 		function saveJob(){
 			if ($("#addJobWin").validate().form()) {
+				var obj = $().f2jwn("addJobWin","add_");
 				
+				obj = JSON.stringify(obj);
 			
+				alert(obj);
 				$.ajax({
 					url: "../admin/job",
 					dataType: "json",
-	// 				data:{cron : cron},
+					data:
+						$().f2jwn("addJobWin","add_")
+						,
 					type: "POST",
 			// 		headers: {'RequestVerficationToken': GetAntiForgeryToken()},
 					error: function(XMLHttpRequest, textStatus, errorThrown) {
-	// 					 alert('伺服器連結錯誤'); 
-						alert(XMLHttpRequest.responseText);
+						 alert('伺服器連結錯誤'); 
+// 						alert(XMLHttpRequest.responseText);
 					},
 					beforeSend: function() {
 			//				$.blockUI({ message: waitHtml() });
@@ -29,20 +34,12 @@
 					},
 					success: function(data, textStatus) {
 						$('input[type=text]').attr("disabled",false);
-			       		if (data.data != null)	{
-			       			
-			       			//	顯示 Bootstrap's Modal 視窗
-							openModalWin("#editDialog");
-							//	openDialog("edit","修改作業");
-			       			
-			       			$().j2fwn(data.data, "editWin", "edit_");
-			       			setSpanHtml(data.data, "editWin", "span_");
-			       			$("#editTitle").html(jName);
-			       			$("#modifyPageBt").show();
-			       			$("#saveBt").hide();
-			       			$("#clnBt").hide();
-			       			$("#mesConfirm").text("");
-						}
+						alert(data.message);
+						window.location.reload();	
+// 			       		if (data.data != null)	{
+// 			       			$('#addJobWin').modal('toggle');
+// 			       			window.location.reload();
+// 						}
 					}
 			    });	
 			}	
@@ -129,6 +126,21 @@
 			$("#modifyPageBt").show();
 			
 		}
+		
+		function startJob(jobId){
+			$.ajax({
+				url: "../admin/startJob",
+				dataType: "json",
+				data:{jobId : jobId},
+				type: "POST",
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					 alert('伺服器連結錯誤'); 
+				},
+				success: function(data, textStatus) {
+					window.location.reload();	
+				}
+		    });	
+		}
 </script>
 </head>
 <body>
@@ -177,8 +189,8 @@
 							<td th:text="${job.remark}">remark</td>
 							<td th:text="${job.runAp}">執行機器</td>
 							<td>	
-								<a href="#" onclick="startJob()" class="btn btn-outline-dark" th:if="${job.remark == 'ACTIVE' }">暫停</a>
-								<a href="#" onclick="startJob()" class="btn btn-outline-dark" th:unless="${job.remark == 'ACTIVE' }">啟動</a>
+								<a href="#" th:onclick="startJob([[${job.jobId}]])" class="btn btn-outline-dark" th:if="${job.remark == 'ACTIVE' }">暫停</a>
+								<a href="#" th:onclick="startJob([[${job.jobId}]])" class="btn btn-outline-dark" th:unless="${job.remark == 'ACTIVE' }">啟動</a>
 							</td>
 							<td><a href="#" onclick="startJobOnce()" class="btn btn-outline-dark">重送</a></td>
 							<td><a href="#" th:onclick="editWin([[${job.quartzCron}]],[[${job.jobId}]],[[${job.runAp}]],[[${job.jobName}]])" class="btn btn-outline-dark">修改</a></td>
@@ -267,45 +279,49 @@
 					<form id="addJobWin">
 						<div class="form-group">
 							<label for="recipient-name" class="col-form-label">排程名稱:</label> 
-							<input type="text" class="form-control" id="recipient-name">
+							<input type="text" class="form-control" id="add_jobName">
 						</div>
 
 						<div class="form-group">
 							<label for="message-text" class="col-form-label">job_id</label> 
-							<input type="text" class="form-control" id="recipient-name">
+							<input type="text" class="form-control" id="add_jobId">
 						</div>
 
 						<div class="form-group">
 							<label for="message-text" class="col-form-label">job_classname</label>
-							<textarea class="form-control" id="message-text"></textarea>
+							<textarea class="form-control" id="add_jobClassname"></textarea>
 						</div>
 
 						<div class="form-group">
 							<label for="message-text" class="col-form-label">run_ap</label> 
-							<input type="text" class="form-control" id="recipient-name">
+							<input type="text" class="form-control" id="add_runAp">
 						</div>
 						<div class="form-group">
-							<label class="control-label">批次執行開始時間：</label>
-							<div class="col-sm-12 row">
-								<span id="span_startHH" style="display: none"></span> 
-								<input type="text" class="form-control col-sm-2" id="edit_startHH" name="edit_startHH">&nbsp;時&nbsp; <span id="span_startMM" style="display: none"></span> 
-								<input type="text" class="form-control col-sm-2" id="edit_startMM" name="edit_startMM">&nbsp;分&nbsp;
-							</div>
+							<label for="message-text" class="col-form-label">cron 表達式</label> 
+							<input type="text" value="0 0/2 9-19 * * ?" class="form-control" id="add_quartzCron">
 						</div>
-						<div class="form-group">
-							<label class="control-label">批次執行結束時間：</label>
-							<div class="col-sm-12 row">
-								<span id="span_endHH" style="display: none"></span> 
-								<input type="text" class="form-control col-sm-2" id="edit_endHH" name="edit_endHH">&nbsp;時
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label">批次執行間隔：</label>
-							<div class="col-sm-12 row">
-								<span id="span_interval" style="display: none"></span> 
-								<input type="text" class="form-control col-sm-2" id="edit_interval" name="edit_interval">&nbsp;分
-							</div>
-						</div>
+<!-- 						<div class="form-group"> -->
+<!-- 							<label class="control-label">批次執行開始時間：</label> -->
+<!-- 							<div class="col-sm-12 row"> -->
+<!-- 								<span id="span_startHH" style="display: none"></span>  -->
+<!-- 								<input type="text" class="form-control col-sm-2" id="add_startHH" >&nbsp;時&nbsp; <span id="span_startMM" style="display: none"></span>  -->
+<!-- 								<input type="text" class="form-control col-sm-2" id="add_startMM" >&nbsp;分&nbsp; -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<div class="form-group"> -->
+<!-- 							<label class="control-label">批次執行結束時間：</label> -->
+<!-- 							<div class="col-sm-12 row"> -->
+<!-- 								<span id="span_endHH" style="display: none"></span>  -->
+<!-- 								<input type="text" class="form-control col-sm-2" id="add_endHH" name="edit_endHH">&nbsp;時 -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 						<div class="form-group"> -->
+<!-- 							<label class="control-label">批次執行間隔：</label> -->
+<!-- 							<div class="col-sm-12 row"> -->
+<!-- 								<span id="span_interval" style="display: none"></span>  -->
+<!-- 								<input type="text" class="form-control col-sm-2" id="add_interval" >&nbsp;分 -->
+<!-- 							</div> -->
+<!-- 						</div> -->
 					</form>
 				</div>
 				<div class="modal-footer">

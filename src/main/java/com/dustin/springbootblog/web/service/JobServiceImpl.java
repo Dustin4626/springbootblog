@@ -15,15 +15,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dustin.springbootblog.model.JobForm;
 import com.dustin.springbootblog.model.QuartzCron;
+import com.dustin.springbootblog.model.SysLogSchedulerFired;
 import com.dustin.springbootblog.model.SysScheduler;
 import com.dustin.springbootblog.model.SysSchedulerFiredList;
 import com.dustin.springbootblog.web.dao.JobRepository;
 
 @Service
 public class JobServiceImpl extends BaseService<SysScheduler,Long> implements JobService{
+	private static final String JOB_START = "ACTIVE";
+	private static final String JOB_STOP = "";
 	
 	private final Scheduler scheduler;
 	private final JobRepository dao;
@@ -41,12 +45,28 @@ public class JobServiceImpl extends BaseService<SysScheduler,Long> implements Jo
 	}
 
 	@Override
+	@Transactional
 	public void addJob(SysScheduler job) throws Exception {
+		SysScheduler dbJob = dao.findByJobId(job.getJobId());
+		if(dbJob!=null) {
+			
+		}
+		
 		dao.save(job);
+		
+		// temp add
+		GenericService sev = defaultSev(SysLogSchedulerFired.class);
+		SysLogSchedulerFired sysLogSchedulerFired = new SysLogSchedulerFired();
+		sysLogSchedulerFired.setJobId(job.getJobId());
+		sysLogSchedulerFired.setJobName(job.getJobName());
+		sev.save(sysLogSchedulerFired);
 	}
 	
-	public void startJob(JobForm form) throws Exception {
-		Job newJob = (Job)Class.forName(form.getJobClassName()).newInstance();
+	@Override
+	public void startJob(String jobId) throws Exception {
+		SysScheduler job = dao.findByJobId(jobId);
+		
+		Job newJob = (Job)Class.forName(job.getJobClassname()).newInstance();
 		
 		// 1.創建Job對象
 		JobDetail jobDetail = JobBuilder.newJob(newJob.getClass()).build();
@@ -61,13 +81,16 @@ public class JobServiceImpl extends BaseService<SysScheduler,Long> implements Jo
 		
 		// corn表達式
 		Trigger trigger = TriggerBuilder.newTrigger()
-				.withSchedule(CronScheduleBuilder.cronSchedule(form.getCronExpression())).build();
+				.withSchedule(CronScheduleBuilder.cronSchedule(job.getQuartzCron())).build();
 
 		// 3.創建schedule對象
 		scheduler.scheduleJob(jobDetail, trigger);
 
 		// 4.啟動
 		scheduler.start();
+		
+		job.setRemark(JOB_START);
+		dao.save(job);
 	}
 
 //	@Override
@@ -88,23 +111,25 @@ public class JobServiceImpl extends BaseService<SysScheduler,Long> implements Jo
 		sb.append(" GROUP BY  A.JOB_ID, A.JOB_NAME, A.RUN_AP, ");
 		sb.append(" A.QUARTZ_CRON, A.REMARK, B.FIRED_DATE, ");
 		sb.append(" B.FIRED_DESC,A.VERSION  ORDER BY A.VERSION ");
-//		dao.jobIndexListAll(pageable);
-		return defaultSev.findSQL4Pagin(sb.toString(), pageable);
+//		return defaultSev.findSQL4Pagin(sb.toString(), pageable);
+		Page<SysSchedulerFiredList> page = defaultSev.findSQL4Pagin(sb.toString(), pageable);
+		page = page.map(this :: setQuartzCronText);
+		return page;
 	}
 	
 	public List<SysScheduler> listAll() {
 		return dao.findAll();
 	}
 
-	@Override
-	public Page<SysScheduler> listAll(Pageable pageable) {
-		Page<SysScheduler> page = dao.findAll(pageable);
-		page = page.map(this :: setQuartzCronText);
-		return page;
-	}
+//	@Override
+//	public Page<SysScheduler> listAll(Pageable pageable) {
+//		Page<SysScheduler> page = dao.findAll(pageable);
+//		page = page.map(this :: setQuartzCronText);
+//		return page;
+//	}
 	
-	private SysScheduler setQuartzCronText(final SysScheduler sysScheduler) {
-		sysScheduler.setQuartzCron(getPresentationQuartzCron(sysScheduler.getQuartzCron()));
+	private SysSchedulerFiredList setQuartzCronText(final SysSchedulerFiredList sysScheduler) {
+		sysScheduler.setQuartzCronText(getPresentationQuartzCron(sysScheduler.getQuartzCron()));
 		return sysScheduler;
 	}
 
@@ -256,6 +281,12 @@ public class JobServiceImpl extends BaseService<SysScheduler,Long> implements Jo
 			}
 		}
 		return sRtn;
+	}
+
+	@Override
+	public Page<SysScheduler> listAll(Pageable pageable) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 //	public String formatDate(String date) {
