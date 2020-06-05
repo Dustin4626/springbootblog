@@ -10,17 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.Errors;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.dustin.springbootblog.model.ApiResponse;
-import com.dustin.springbootblog.model.JobForm;
 import com.dustin.springbootblog.model.QuartzCron;
 import com.dustin.springbootblog.model.SysScheduler;
 import com.dustin.springbootblog.web.service.JobService;
@@ -81,7 +78,7 @@ public class ScheduleController {
      */
     @PostMapping("/startJob")
     @ResponseBody
-	public ResponseEntity<ApiResponse> startJob(String jobId) {
+	public ResponseEntity<ApiResponse> startJob(@RequestParam String jobId) {
 //    public ResponseEntity<ApiResponse> addJob(@Valid SysScheduler job, Errors errors) {
 //		if (errors.hasErrors()) {
 //			return new ResponseEntity<>(ApiResponse.msg(errors.toString()), HttpStatus.BAD_REQUEST);

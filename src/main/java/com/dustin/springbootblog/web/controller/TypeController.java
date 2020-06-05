@@ -67,6 +67,18 @@ public class TypeController {
 		return "admin/type";
 	}
 	
+	@GetMapping("/types/search")
+	public String typeSearch(
+			@PageableDefault(size = 5, sort = { "id" }, direction = Direction.ASC) Pageable pageable,
+			Model model) {
+		System.out.println(pageable);
+		Page<Type> types = service.listType(pageable);
+		System.out.println(types.toList());
+		model.addAttribute("type",types);
+//		model.addAttribute("types", service.findAll());
+		return "admin/type";
+	}
+	
 	@GetMapping("/types/input")
 	public String adminTypeAddPage(Model model) {
 		model.addAttribute("type", new Type());

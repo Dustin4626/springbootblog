@@ -17,11 +17,12 @@ public class Blog implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String id;
 
-	private byte appreciation;
+	private boolean appreciation;
 
-	private byte commentabled;
+	private boolean commentabled;
 
 	@Lob
 	private String content;
@@ -37,9 +38,9 @@ public class Blog implements Serializable {
 
 	private String flag;
 
-	private byte published;
+	private boolean published;
 
-	private byte recommend;
+	private boolean recommend;
 
 	@Column(name="share_statement")
 	private byte shareStatement;
@@ -79,19 +80,19 @@ public class Blog implements Serializable {
 		this.id = id;
 	}
 
-	public byte getAppreciation() {
+	public boolean getAppreciation() {
 		return this.appreciation;
 	}
 
-	public void setAppreciation(byte appreciation) {
+	public void setAppreciation(boolean appreciation) {
 		this.appreciation = appreciation;
 	}
 
-	public byte getCommentabled() {
+	public boolean getCommentabled() {
 		return this.commentabled;
 	}
 
-	public void setCommentabled(byte commentabled) {
+	public void setCommentabled(boolean commentabled) {
 		this.commentabled = commentabled;
 	}
 
@@ -135,19 +136,19 @@ public class Blog implements Serializable {
 		this.flag = flag;
 	}
 
-	public byte getPublished() {
+	public boolean getPublished() {
 		return this.published;
 	}
 
-	public void setPublished(byte published) {
+	public void setPublished(boolean published) {
 		this.published = published;
 	}
 
-	public byte getRecommend() {
+	public boolean getRecommend() {
 		return this.recommend;
 	}
 
-	public void setRecommend(byte recommend) {
+	public void setRecommend(boolean recommend) {
 		this.recommend = recommend;
 	}
 

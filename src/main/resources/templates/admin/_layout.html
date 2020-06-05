@@ -16,7 +16,7 @@
       <div class="sidebar-sticky">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a th:href="@{/admin/index}" th:class="${active=='dashboard.html' ? 'nav-link active' : 'nav-link'}">
+            <a th:href="@{/admin/blogs}" th:class="${active=='blogs.html' ? 'nav-link active' : 'nav-link'}">
               <span data-feather="home"></span>
               	首頁
             </a>
@@ -89,6 +89,7 @@
     </nav>
 <!-- 	sidebar end -->
 
+<!-- 	script start -->
 <th:block th:fragment="script">
 	<!-- Bootstrap core CSS -->
 	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
@@ -130,4 +131,16 @@
       feather.replace()
     </script>
 </th:block>
+<!-- 	script end -->
+
+<!-- 	alert message start -->.
+<th:block th:fragment="message">
+	<div th:unless="${#strings.isEmpty(message)}" class="alert alert-primary alert-dismissible fade show" role="alert">
+		[[${message}]]
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+</th:block>
+<!-- 	alert message end -->
 </html>

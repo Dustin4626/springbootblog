@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  *
  */
 //public class MyAdaptableJobFactory extends AdaptableJobFactory {
-@Component
+//@Component
 public class MyAdaptableJobFactory extends SpringBeanJobFactory {
 
 	//	可以將一個對象添加到SpringIOC容器中,並完成對象注入

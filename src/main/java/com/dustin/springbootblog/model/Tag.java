@@ -2,6 +2,9 @@ package com.dustin.springbootblog.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -21,6 +24,7 @@ public class Tag implements Serializable {
 	private String name;
 
 	//bi-directional many-to-many association to Blog
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(
 		name="t_blog_tags"
