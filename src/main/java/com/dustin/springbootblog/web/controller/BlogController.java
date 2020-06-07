@@ -1,23 +1,18 @@
 package com.dustin.springbootblog.web.controller;
 
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dustin.springbootblog.model.ApiResponse;
 import com.dustin.springbootblog.model.Blog;
 import com.dustin.springbootblog.vo.BlogQuery;
 import com.dustin.springbootblog.web.service.BlogService;
@@ -59,20 +54,24 @@ public class BlogController {
 	
 	@GetMapping("/blogs/input")
 	public String input(Model model) {
+		model.addAttribute("blog", new Blog());
+		model.addAttribute("types", typeService.findAll());
 		return "admin/blogs-input";
 	}
 	
 	@PostMapping("/blogs")
-	@ResponseBody
-	public ResponseEntity<ApiResponse> save(Blog blog) {
-//		try {
-			blog.setCommentabled(true);
+	public String save(Blog blog) {
+		System.out.println(blog);
 			blogService.save(blog);
-//		} catch (Exception e) {
-//			log.error();
-//			return new ResponseEntity<>(ApiResponse.msg(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-		return new ResponseEntity<>(ApiResponse.msg("操作成功"), HttpStatus.CREATED);
+		return "redirect:/admin/blogs";
+	}
+	
+	@GetMapping("/blogs/{id}/input")
+	public String input(@PathVariable String id , Model model) {
+		Blog blog = blogService.getBlog(id);
+		model.addAttribute("blog", blog);
+		model.addAttribute("types", typeService.findAll());
+		return "admin/blogs-input";
 	}
 	
 //	@GetMapping("/admin/blogs")

@@ -67,4 +67,9 @@ public class BlogServiceImpl implements BlogService{
 		dao.save(blog);
 	}
 
+	@Override
+	public Blog getBlog(String id) {
+		return dao.getOne(id);
+	}
+
 }

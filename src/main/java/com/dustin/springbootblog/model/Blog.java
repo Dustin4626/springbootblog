@@ -66,7 +66,8 @@ public class Blog implements Serializable {
 	private List<Comment> comments;
 
 	//bi-directional many-to-many association to Tag
-	@ManyToMany(mappedBy="blogs")
+//	@ManyToMany(mappedBy="blogs",cascade = CascadeType.PERSIST)
+	@ManyToMany(cascade = {CascadeType.PERSIST})
 	private List<Tag> tags;
 
 	public Blog() {
@@ -230,4 +231,11 @@ public class Blog implements Serializable {
 		this.tags = tags;
 	}
 
+	@Override
+	public String toString() {
+		return "Blog [id=" + id + ", content=" + content + ", recommend=" + recommend + ", title=" + title + ", type="
+				+ type + ", tags=" + tags + "]";
+	}
+
+	
 }

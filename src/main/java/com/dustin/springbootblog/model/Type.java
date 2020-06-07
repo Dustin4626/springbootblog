@@ -87,4 +87,10 @@ public class Type implements Serializable {
 		return blog;
 	}
 
+	@Override
+	public String toString() {
+		return "Type [id=" + id + ", name=" + name + "]";
+	}
+
+	
 }

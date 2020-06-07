@@ -24,17 +24,21 @@ public class Tag implements Serializable {
 	private String name;
 
 	//bi-directional many-to-many association to Blog
+//	@JsonIgnore
+//	@ManyToMany
+//	@JoinTable(
+//		name="t_blog_tags"
+//		, joinColumns={
+//			@JoinColumn(name="tags_id")
+//			}
+//		, inverseJoinColumns={
+//			@JoinColumn(name="blogs_id")
+//			}
+//		)
+//	private List<Blog> blogs;
+	
 	@JsonIgnore
-	@ManyToMany
-	@JoinTable(
-		name="t_blog_tags"
-		, joinColumns={
-			@JoinColumn(name="tags_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="blogs_id")
-			}
-		)
+	@ManyToMany(mappedBy = "tags")
 	private List<Blog> blogs;
 
 	public Tag() {
@@ -62,6 +66,11 @@ public class Tag implements Serializable {
 
 	public void setBlogs(List<Blog> blogs) {
 		this.blogs = blogs;
+	}
+
+	@Override
+	public String toString() {
+		return "Tag [id=" + id + ", name=" + name + "]";
 	}
 
 }

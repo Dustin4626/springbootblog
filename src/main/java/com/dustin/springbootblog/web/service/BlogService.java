@@ -16,4 +16,6 @@ public interface BlogService {
 	Page<Blog> findAll(Pageable pageable, BlogQuery blogQuery);
 
 	void save(Blog blog);
+
+	Blog getBlog(String id);
 }
