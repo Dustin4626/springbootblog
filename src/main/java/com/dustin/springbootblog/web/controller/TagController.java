@@ -40,17 +40,14 @@ public class TagController {
 		return service.findAll();
 	}
 	
-//	@GetMapping("/tags/search")
-//	public String tagsearch(
-//			@PageableDefault(size = 5, sort = { "id" }, direction = Direction.ASC) Pageable pageable,
-//			Model model) {
-//		System.out.println(pageable);
-//		Page<Type> tags = service.listType(pageable);
-//		System.out.println(tags.toList());
-//		model.addAttribute("type",tags);
-////		model.addAttribute("tags", service.findAll());
-//		return "admin/type";
-//	}
+	@GetMapping("/tags/search")
+	public String tagsearch(
+			@PageableDefault(size = 5, sort = { "id" }, direction = Direction.ASC) Pageable pageable,
+			Model model) {
+		Page<Tag> tags = service.listTag(pageable);
+		model.addAttribute("type", tags);
+		return "admin/type";
+	}
 //	
 //	@GetMapping("/tags/input")
 //	public String adminTypeAddPage(Model model) {
@@ -58,15 +55,15 @@ public class TagController {
 //		return "admin/type-input";
 //	}
 //	
-//	@GetMapping("/tags/{id}/input")
-//	public String adminTypeInputPage(@PathVariable BigDecimal id, Model model) {
-//		Optional<Type> opt = service.findById(id);
-//		if(!opt.isPresent()) {
-//			return REDIRECT_TYPE_INDEX;
-//		}
-//		model.addAttribute("type",opt.get());
-//		return "admin/type-input";
-//	}
+	@GetMapping("/tags/{id}/input")
+	public String adminTypeInputPage(@PathVariable String id, Model model) {
+		Optional<Tag> opt = service.findById(id);
+		if (!opt.isPresent()) {
+			return REDIRECT_TYPE_INDEX;
+		}
+		model.addAttribute("tag", opt.get());
+		return "admin/type-input";
+	}
 //	
 ////	@PostMapping("/tags")
 ////	public String saveOrUpdateType(
@@ -85,33 +82,33 @@ public class TagController {
 ////		return REDIRECT_TYPE_INDEX;
 ////	}
 //	
-//	@PostMapping("/tags")
-//	public String post(@Valid Type type,BindingResult result,
-//			RedirectAttributes attributes) {
-//		if (type.getId() == null) {
-//			Optional<Type> type1 = service.findByName(type.getName());
-//			if (type1.isPresent()) {
-//				result.rejectValue("name", "nameError", "不能添加重複的標籤");
-//			}
-//		}
-//
-//		if (result.hasErrors()) {
-//			return "admin/type-input";
-//		}
-//		Type t = service.save(type);
-//		if (t == null) {
-//			attributes.addFlashAttribute("message", "操作失敗");
-//		} else {
-//			attributes.addFlashAttribute("message", "新增成功");
-//		}
-//		return "redirect:/admin/tags";
-//	}
-//	
-//	@GetMapping("/tags/{id}/delete")
-//	public String deleteType(@PathVariable BigDecimal id, RedirectAttributes attributes) {
-//		service.deleteById(id);
-//		attributes.addFlashAttribute("message", "操作成功");
-//		return REDIRECT_TYPE_INDEX;
-//	}
+	@PostMapping("/tags")
+	public String post(@Valid Tag tag,BindingResult result,
+			RedirectAttributes attributes) {
+		if (tag.getId() == null) {
+			Optional<Tag> type1 = service.findByName(tag.getName());
+			if (type1.isPresent()) {
+				result.rejectValue("name", "nameError", "不能添加重複的標籤");
+			}
+		}
+
+		if (result.hasErrors()) {
+			return "admin/type-input";
+		}
+		Tag t = service.save(tag);
+		if (t == null) {
+			attributes.addFlashAttribute("message", "操作失敗");
+		} else {
+			attributes.addFlashAttribute("message", "新增成功");
+		}
+		return "redirect:/admin/tags";
+	}
+	
+	@GetMapping("/tags/{id}/delete")
+	public String deleteType(@PathVariable String id, RedirectAttributes attributes) {
+		service.deleteById(id);
+		attributes.addFlashAttribute("message", "操作成功");
+		return REDIRECT_TYPE_INDEX;
+	}
 	
 }

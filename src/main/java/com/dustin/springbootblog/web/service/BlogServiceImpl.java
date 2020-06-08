@@ -72,4 +72,9 @@ public class BlogServiceImpl implements BlogService{
 		return dao.getOne(id);
 	}
 
+	@Override
+	public void delete(String id) {
+		dao.deleteById(id);
+	}
+
 }

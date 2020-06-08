@@ -23,10 +23,6 @@ public class TagServiceImpl implements TagService {
 		return service.findAll();
 	}
 
-	@Override
-	public Optional<Tag> findById(BigDecimal id) {
-		return null;
-	}
 
 	@Override
 	public Optional<Tag> findByName(String name) {
@@ -41,6 +37,20 @@ public class TagServiceImpl implements TagService {
 	@Override
 	public Page<Tag> listTag(Pageable pageable) {
 		return null;
+	}
+
+
+	@Override
+	public Optional<Tag> findById(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void deleteById(String id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

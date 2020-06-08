@@ -11,8 +11,9 @@ import com.dustin.springbootblog.model.Tag;
 
 public interface TagService {
 	List<Tag> findAll();
-	Optional<Tag> findById(BigDecimal id);
+	Optional<Tag> findById(String id);
 	Optional<Tag> findByName(String name);
 	Tag save(Tag Tag);
 	Page<Tag> listTag(Pageable pageable);
+	void deleteById(String id);
 }

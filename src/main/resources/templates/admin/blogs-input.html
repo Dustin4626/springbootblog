@@ -14,58 +14,45 @@
 		<div class="row">
 			<nav th:replace="~{admin/_layout :: sidebar(active='blogs.html')}"></nav>
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-			
-				<form id="addBlogWin" th:action="@{/admin/blogs/}" method="post" th:object="${blog}">
-					<div class="form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroup-sizing-default">標題</span>
-						</div>
-						<input type="text" class="form-control" th:field="*{title}" />
-					</div>
 
-					<div class="form-group">
-						<label class="mr-sm-2 sr-only" for="typeId">分類</label>
-<!-- 						<select class="custom-select mr-sm-2" id="type"> -->
-<!-- 							<option value="">分類..</option> -->
-<!-- 							<option th:each="type : ${types}" th:value="${type.id}" th:text="${type.name}"></option> -->
-<!-- 						</select> -->
-						<select class="custom-select mr-sm-2" th:field="*{type}" id="type">
-							<option value="">分類..</option>
-							<option th:each="type : ${types}" th:value="${type.id}" th:text="${type.name}"></option>
+			<form id="addBlogWin" th:action="@{/admin/blogs/}" method="post" th:object="${blog}">
+				<div class="form-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroup-sizing-default">標題</span>
+					</div>
+					<input type="text" class="form-control" th:field="*{title}" />
+				</div>
+
+				<div class="form-group">
+					<label class="mr-sm-2 sr-only" for="typeId">分類</label>
+					<!-- 						<select class="custom-select mr-sm-2" id="type"> -->
+					<!-- 							<option value="">分類..</option> -->
+					<!-- 							<option th:each="type : ${types}" th:value="${type.id}" th:text="${type.name}"></option> -->
+					<!-- 						</select> -->
+					<select class="custom-select mr-sm-2" th:field="*{type}" id="type">
+						<option value="">分類..</option>
+						<option th:each="type : ${types}" th:value="${type.id}" th:text="${type.name}"></option>
+					</select>
+				</div>
+				<div class="form-group">
+					<div class="custom-control custom-checkbox mr-sm-2">
+						<input type="checkbox" class="custom-control-input" th:field="*{recommend}" id="recommend"> <label class="custom-control-label" for="recommend">推薦</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="dropdown-mul-1">
+						<select style="display: none" id="tags" name="tags" multiple placeholder="Select">
 						</select>
 					</div>
+				</div>
+				<div class="form-group">
+					<div id="summernote"></div>
+				</div>
 
-<!-- 					<div class="form-group"> -->
-<!-- 						<label class="mr-sm-2 sr-only" for="typeId">分類</label> -->
-<!-- 						<select class="custom-select mr-sm-2" th:field="*{type}" id="type"> -->
-<!-- 							<option value="">分類..</option> -->
-<!-- 							<option th:each="tag : *{tags}" th:value="${tag.id}" th:text="${tag.name}"></option> -->
-<!-- 						</select> -->
-<!-- 					</div> -->
-
-					<div class="form-group">
-						<div class="custom-control custom-checkbox mr-sm-2">
-							<input type="checkbox" class="custom-control-input" th:field="*{recommend}" id="recommend">
-							<label class="custom-control-label" for="recommend">推薦</label>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="dropdown-mul-1">
-							<select style="display: none" id="tags" multiple placeholder="Select">
-								<option value="1" selected>webstorm88</option>
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
-						<div id="summernote" >[[*{content}]]</div>
-					</div>
-
-					<div class="form-group">
-<!-- 						<a href="#" onclick="" class="btn btn-outline-dark">save</a> -->
-						<a href="#" onclick="save()" class="btn btn-outline-dark">save</a>
-						<input type="hidden" name="content" id="content"/>
-					</div>
-				</form>
+				<div class="form-group">
+					<a href="#" onclick="save()" class="btn btn-outline-dark">save</a> <input type="hidden" th:field="*{content}" />
+				</div>
+			</form>
 			</main>
 		</div>
 	</div>
@@ -81,6 +68,7 @@
 <link th:href="@{/css/jquery.dropdown.css}" rel="stylesheet">
 <script th:src="@{/js/jquery.dropdown.js}"></script>
 <script th:inline="javascript">
+
 	getTags();
 	
 	function getTags() {
@@ -99,26 +87,28 @@
 					multipleMode : 'label',
 					choice : function() {
 						console.log(arguments, this);
-						
-						// alert(JSON.stringify(arguments[1]));
 					}
 				});
-				$(".dropdown-option").each(function(){
-					/*<![CDATA[*/
-						
-				    /*[# th:each="tag : ${blog.tags}"]*/
-				    
-				    	
-// 				        ...
-// 				        var l = new google.maps.LatLng(/*[[${page.lat}]]*/, /*[[${page.long}]]*/);
-// 				        ...
-				    /*[/]*/
 
-				/*]]>*/
-// 					alert($(this).data("value"));
-				})   
-				
-				
+				//trigger 回填 tags to select box 
+					/*<![CDATA[*/
+					
+						 /*[# th:each="tag : ${blog.tags}"]*/
+        					var tagId = /*[[${tag.id}]]*/ 'default';
+        					$(".dropdown-option").each(function(){
+
+            					// check attribute data-value
+	        					if($(this).data("value") == tagId){
+	        						$(this).trigger( "click" );
+	            				}
+        					})
+    					/*[/]*/
+    					
+					/*]]>*/
+				   
+				// 回填文章內容
+				var content = $("#content").val();
+				$('#summernote').summernote('code', content);
 			}
 		});
 	}
@@ -127,34 +117,7 @@
 	function save() {
 		var content = $('#summernote').summernote('code');
 		$("#content").val(content);
-		alert(content);
 		$("#addBlogWin").submit();
-// 		var blog = $().f2jwn("addBlogWin","");
-// 		var str = JSON.stringify(blog); 
-// 		alert(str);
-		
-// 		var content = $('#summernote').summernote('code');
-// 		var title = $("#title").val();
-// 		var title = $("#recommend").val();
-// 		var title = $("#type").val();
-		
-		// 		  $('#summernote').summernote('destroy');
-		// 		  alert(markup);
-
-// 		$.ajax({
-// 			url : "/admin/blogs",
-// 			dataType : "json",
-// 			type : "POST",
-// 			data : {
-// 				content : content
-// 			},
-// 			error : function(XMLHttpRequest, textStatus, errorThrown) {
-// 				alert('伺服器連結錯誤');
-// 			},
-// 			success : function(data, textStatus) {
-
-// 			}
-// 		});
 	}
 
 	$('#summernote').summernote({

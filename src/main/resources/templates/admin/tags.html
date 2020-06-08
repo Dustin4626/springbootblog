@@ -1,0 +1,52 @@
+<!doctag html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<title>Tag Template</title>
+</head>
+<body>
+
+	<nav th:replace="~{admin/_layout :: navbar}">..</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<nav th:replace="~{admin/_layout :: sidebar(active='tags.html')}"></nav>
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+
+			<h2>標籤管理</h2>
+			<a href="#" th:href="@{/admin/tags/input}" class="btn btn-outline-dark">新增</a> <th:block th:replace="admin/_layout :: message"></th:block>
+
+			<div class="table-responsive">
+				<table class="table table-striped table-sm">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="tag : ${tags}">
+							<td th:text="${tag.id}">id</td>
+							<td th:text="${tag.name}">name</td>
+							<td><a href="#" th:href="@{/admin/tags/{id}/input(id=${tag.id})}" class="btn btn-outline-dark">編輯</a> <a href="#" th:href="@{/admin/tags/{id}/delete(id=${tag.id})}" class="btn btn-outline-dark">刪除</a></td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th>
+								<ul class="pagination" th:if="${tag.totalPages}>1">
+									<li class="page-item"><a th:href="@{/admin/tags/search(page=${tag.number}-1)}" class="page-link" th:unless="${tag.first}">上一頁</a></li>
+									<li class="page-item"><a th:href="@{/admin/tags/search(page=${tag.number}+1)}" class="page-link" th:unless="${tag.last}">下一頁</a></li>
+								</ul>
+							</th>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			</main>
+		</div>
+	</div>
+	<th:block th:replace="admin/_layout :: script"></th:block>
+</body>
+</html>

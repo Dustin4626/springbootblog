@@ -67,11 +67,18 @@ public class BlogController {
 	}
 	
 	@GetMapping("/blogs/{id}/input")
-	public String input(@PathVariable String id , Model model) {
+	public String input(@PathVariable String id, Model model) {
 		Blog blog = blogService.getBlog(id);
 		model.addAttribute("blog", blog);
+		model.addAttribute("title", blog.getTitle());
 		model.addAttribute("types", typeService.findAll());
 		return "admin/blogs-input";
+	}
+	
+	@GetMapping("/blogs/{id}/delete")
+	public String input(@PathVariable String id) {
+		blogService.delete(id);
+		return "redirect:/admin/blogs";
 	}
 	
 //	@GetMapping("/admin/blogs")
