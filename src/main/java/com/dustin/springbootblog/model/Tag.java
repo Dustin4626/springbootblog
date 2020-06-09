@@ -2,6 +2,7 @@ package com.dustin.springbootblog.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,8 +20,10 @@ public class Tag implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String id;
 
+	@NotBlank(message = "標籤名稱不能為空白")
 	private String name;
 
 	//bi-directional many-to-many association to Blog

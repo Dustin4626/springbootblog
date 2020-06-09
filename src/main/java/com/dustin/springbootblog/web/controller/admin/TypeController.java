@@ -1,4 +1,4 @@
-package com.dustin.springbootblog.web.controller;
+package com.dustin.springbootblog.web.controller.admin;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

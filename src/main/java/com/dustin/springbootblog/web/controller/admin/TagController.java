@@ -1,4 +1,4 @@
-package com.dustin.springbootblog.web.controller;
+package com.dustin.springbootblog.web.controller.admin;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,7 @@ import com.dustin.springbootblog.web.service.TagService;
 @RequestMapping("/admin")
 public class TagController {
 	
-	public static final String REDIRECT_TYPE_INDEX = "redirect:/admin/tags";  
+	public static final String REDIRECT_TYPE_INDEX = "redirect:/admin/tags/search";  
 
 	@Autowired
 	private TagService service;
@@ -42,19 +43,19 @@ public class TagController {
 	
 	@GetMapping("/tags/search")
 	public String tagsearch(
-			@PageableDefault(size = 5, sort = { "id" }, direction = Direction.ASC) Pageable pageable,
+			@PageableDefault(size = 10, sort = { "id" }, direction = Direction.DESC) Pageable pageable,
 			Model model) {
 		Page<Tag> tags = service.listTag(pageable);
-		model.addAttribute("type", tags);
-		return "admin/type";
+		model.addAttribute("tags", tags);
+		return "admin/tags";
 	}
-//	
-//	@GetMapping("/tags/input")
-//	public String adminTypeAddPage(Model model) {
-//		model.addAttribute("type", new Type());
-//		return "admin/type-input";
-//	}
-//	
+	
+	@GetMapping("/tags/input")
+	public String adminTagAddPage(Model model) {
+		model.addAttribute("tag", new Tag());
+		return "admin/tags-input";
+	}
+	
 	@GetMapping("/tags/{id}/input")
 	public String adminTypeInputPage(@PathVariable String id, Model model) {
 		Optional<Tag> opt = service.findById(id);
@@ -62,7 +63,7 @@ public class TagController {
 			return REDIRECT_TYPE_INDEX;
 		}
 		model.addAttribute("tag", opt.get());
-		return "admin/type-input";
+		return "admin/tags-input";
 	}
 //	
 ////	@PostMapping("/tags")
@@ -85,7 +86,8 @@ public class TagController {
 	@PostMapping("/tags")
 	public String post(@Valid Tag tag,BindingResult result,
 			RedirectAttributes attributes) {
-		if (tag.getId() == null) {
+		
+		if (StringUtils.isEmpty(tag.getId())) {
 			Optional<Tag> type1 = service.findByName(tag.getName());
 			if (type1.isPresent()) {
 				result.rejectValue("name", "nameError", "不能添加重複的標籤");
@@ -93,7 +95,7 @@ public class TagController {
 		}
 
 		if (result.hasErrors()) {
-			return "admin/type-input";
+			return "admin/tags-input";
 		}
 		Tag t = service.save(tag);
 		if (t == null) {
@@ -101,7 +103,7 @@ public class TagController {
 		} else {
 			attributes.addFlashAttribute("message", "新增成功");
 		}
-		return "redirect:/admin/tags";
+		return "redirect:/admin/tags/search";
 	}
 	
 	@GetMapping("/tags/{id}/delete")

@@ -16,41 +16,39 @@ import com.dustin.springbootblog.web.dao.TagRepository;
 public class TagServiceImpl implements TagService {
 
 	@Autowired
-	private TagRepository service;
+	private TagRepository dao;
 	
 	@Override
 	public List<Tag> findAll() {
-		return service.findAll();
+		return dao.findAll();
 	}
 
 
 	@Override
 	public Optional<Tag> findByName(String name) {
-		return null;
+		return dao.findByName(name);
 	}
 
 	@Override
-	public Tag save(Tag Tag) {
-		return null;
+	public Tag save(Tag tag) {
+		return dao.save(tag);
 	}
 
 	@Override
 	public Page<Tag> listTag(Pageable pageable) {
-		return null;
+		return dao.findAll(pageable);
 	}
 
 
 	@Override
 	public Optional<Tag> findById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findById(id);
 	}
 
 
 	@Override
 	public void deleteById(String id) {
-		// TODO Auto-generated method stub
-		
+		dao.deleteById(id);
 	}
 
 }

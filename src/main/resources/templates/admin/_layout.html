@@ -18,7 +18,7 @@
           <li class="nav-item">
             <a th:href="@{/admin/blogs}" th:class="${active=='blogs.html' ? 'nav-link active' : 'nav-link'}">
               <span data-feather="home"></span>
-              	首頁
+              	Blog
             </a>
           </li>
           <li class="nav-item">
@@ -34,7 +34,8 @@
             </a>
           </li>
           <li class="nav-item">
-          	<a th:href="@{/admin/tags}" th:class="${active=='tag.html' ? 'nav-link active' : 'nav-link'}">
+          	<a th:href="@{/admin/tags/search}" th:class="${active=='tags.html' ? 'nav-link active' : 'nav-link'}">
+          	<span data-feather="users"></span>
               	標籤管理
             </a>
           </li>
