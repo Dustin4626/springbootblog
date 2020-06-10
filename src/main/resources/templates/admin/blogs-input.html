@@ -60,7 +60,10 @@
 				<div class="form-group">
 					<div id="summernote"></div>
 				</div>
-
+				<div class="form-group">
+    				<label for="description">描述</label>
+  	 				<textarea class="form-control" th:field="*{description}" rows="3"></textarea>
+  				</div>
 				<div class="form-group">
 					<a href="#" onclick="save()" class="btn btn-outline-dark">儲存</a> 
 					<input type="hidden" th:field="*{content}" />
@@ -133,8 +136,11 @@
 	function save() {
 		var content = $('#summernote').summernote('code');
 		$("#content").val(content);
-		$("#addBlogWin").validate({onfocusout:false});
-		$("#addBlogWin").submit();
+		
+		if($("#addBlogWin").validate().form()) {
+			$("#addBlogWin").submit();	
+		}
+		
 	}
 
 	$('#summernote').summernote({

@@ -1,6 +1,5 @@
 package com.dustin.springbootblog.web.controller.admin;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dustin.springbootblog.model.Tag;
-import com.dustin.springbootblog.model.Type;
 import com.dustin.springbootblog.web.service.TagService;
 
 @Controller

@@ -1,5 +1,7 @@
 package com.dustin.springbootblog.web.controller.admin;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.dustin.springbootblog.model.Blog;
+import com.dustin.springbootblog.model.User;
 import com.dustin.springbootblog.vo.BlogQuery;
 import com.dustin.springbootblog.web.service.BlogService;
-import com.dustin.springbootblog.web.service.TagService;
 import com.dustin.springbootblog.web.service.TypeService;
 
 @Controller
@@ -30,9 +32,6 @@ public class BlogController {
 	
 	@Autowired
 	private TypeService typeService;
-	
-	@Autowired
-	private TagService tagService;
 	
 	@GetMapping("/blogs")
 	public String index(
@@ -61,10 +60,9 @@ public class BlogController {
 	}
 	
 	@PostMapping("/blogs")
-	public String save(Blog blog) {
-		if(StringUtils.isEmpty(blog.getId())) {
-			
-		}
+	public String save(Blog blog,HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		blog.setUser(user);
 		System.out.println(blog);
 		blogService.save(blog);
 		return "redirect:/admin/blogs";

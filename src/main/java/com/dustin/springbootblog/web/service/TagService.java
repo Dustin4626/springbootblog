@@ -15,4 +15,5 @@ public interface TagService {
 	Tag save(Tag Tag);
 	Page<Tag> listTag(Pageable pageable);
 	void deleteById(String id);
+	Page<Tag> listTagTop(int i);
 }

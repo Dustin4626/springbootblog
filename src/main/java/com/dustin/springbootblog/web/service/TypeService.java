@@ -20,4 +20,5 @@ public interface TypeService {
 	void deleteById(BigDecimal id);
 	String parseExcel(MultipartFile reapExcelDataFile) throws IOException;
 	Page<Type> listType(Pageable pageable);
+	Page<Type> listTypeTop(int i);
 }

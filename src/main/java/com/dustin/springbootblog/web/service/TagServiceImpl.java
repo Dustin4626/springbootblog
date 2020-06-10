@@ -6,7 +6,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.dustin.springbootblog.model.Tag;
@@ -23,7 +25,6 @@ public class TagServiceImpl implements TagService {
 		return dao.findAll();
 	}
 
-
 	@Override
 	public Optional<Tag> findByName(String name) {
 		return dao.findByName(name);
@@ -39,16 +40,20 @@ public class TagServiceImpl implements TagService {
 		return dao.findAll(pageable);
 	}
 
-
 	@Override
 	public Optional<Tag> findById(String id) {
 		return dao.findById(id);
 	}
 
-
 	@Override
 	public void deleteById(String id) {
 		dao.deleteById(id);
+	}
+
+	@Override
+	public Page<Tag> listTagTop(int i) {
+		Pageable pageable = PageRequest.of(0, i, Sort.by("id").descending());
+		return dao.findAll(pageable);
 	}
 
 }

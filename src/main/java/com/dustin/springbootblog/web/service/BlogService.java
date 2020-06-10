@@ -20,4 +20,8 @@ public interface BlogService {
 	Blog getBlog(String id);
 	
 	void delete(String id);
+
+	Page<Blog> listRecommendBlogTop(int i);
+
+	Blog getBlogByIdAndUpdateViewCount(String id);
 }
