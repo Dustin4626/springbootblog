@@ -34,18 +34,15 @@ public class Comment implements Serializable {
 
 	private String nickname;
 
-	//bi-directional many-to-one association to Blog
 	@ManyToOne
 	private Blog blog;
 
-	//bi-directional many-to-one association to Comment
 	@ManyToOne
 	@JoinColumn(name="parent_comment_id")
-	private Comment comment;
+    private Comment parentComment;
 
-	//bi-directional many-to-one association to Comment
-	@OneToMany(mappedBy="comment")
-	private List<Comment> comments;
+	@OneToMany(mappedBy="parentComment")
+	private List<Comment> replyComments;
 
 	public Comment() {
 	}
@@ -114,34 +111,26 @@ public class Comment implements Serializable {
 		this.blog = blog;
 	}
 
-	public Comment getComment() {
-		return this.comment;
+	public Comment getParentComment() {
+		return parentComment;
 	}
 
-	public void setComment(Comment comment) {
-		this.comment = comment;
+	public void setParentComment(Comment parentComment) {
+		this.parentComment = parentComment;
 	}
 
-	public List<Comment> getComments() {
-		return this.comments;
+	public List<Comment> getReplyComments() {
+		return replyComments;
 	}
 
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
+	public void setReplyComments(List<Comment> replyComments) {
+		this.replyComments = replyComments;
 	}
 
-	public Comment addComment(Comment comment) {
-		getComments().add(comment);
-		comment.setComment(this);
-
-		return comment;
-	}
-
-	public Comment removeComment(Comment comment) {
-		getComments().remove(comment);
-		comment.setComment(null);
-
-		return comment;
+	@Override
+	public String toString() {
+		return "Comment [id=" + id + ", adminComment=" + adminComment + ", avatar=" + avatar + ", content=" + content + ", createTime=" + createTime + ", email=" + email + ", nickname=" + nickname
+				+ ", blog=" + blog + "]";
 	}
 
 }

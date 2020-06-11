@@ -135,7 +135,9 @@ public class BlogServiceImpl implements BlogService{
 			throw new NotFoundException("not found blog");
 		}
 		blog.setViews(blog.getViews() + 1);
+		
 		dao.save(blog);//有沒有加這行都會update blog
+		
 		return blog;
 	}
 }
