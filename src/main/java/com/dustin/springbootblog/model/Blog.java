@@ -231,11 +231,8 @@ public class Blog implements Serializable {
 		this.tags = tags;
 	}
 
-	@Override
-	public String toString() {
-		return "Blog [id=" + id + ", content=" + content + ", recommend=" + recommend + ", title=" + title + ", type="
-				+ type + ", tags=" + tags + "]";
-	}
+
+	
 
 	
 }

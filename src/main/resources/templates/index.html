@@ -56,7 +56,8 @@
             <div th:each="blog : ${page}" class="ui padded vertical segment m-padded-tb-large">
               <div class="ui mobile reversed stackable grid">
                 <div class="eleven wide column">
-                  <h3 class="ui header">[[${blog.title}]]</h3>
+                
+                  <h3 class="ui header"><a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="m-black" th:text="${blog.title}">title test</a></h3>
                   <p class="m-text">[[${blog.description}]]...</p>
                   <div class="ui grid">
                     <div class="eleven wide column">
@@ -188,7 +189,7 @@
           <h4 class="ui inverted header m-text-thin m-text-spaced " >最新文章</h4>
           <div class="ui inverted link list">
           	<a th:each="blog :${recommendBlogs}" href="#" class="item m-text-thin">
-          		<span th:text="${blog.title}">用户故事（User Story）</span>
+          		<span th:text="${blog.title}">用戶故事（User Story）</span>
           	</a>
 <!--             <a href="#" class="item m-text-thin">用户故事（User Story）</a> -->
 <!--             <a href="#" class="item m-text-thin">用户故事（User Story）</a> -->
@@ -204,7 +205,7 @@
         </div>
         <div class="seven wide column">
           <h4 class="ui inverted header m-text-thin m-text-spaced ">Blog</h4>
-          <p class="m-text-thin m-text-spaced m-opacity-mini">这是我的个人博客、会分享关于编程、写作、思考相关的任何内容，希望可以给来到这儿的人有所帮助...</p>
+          <p class="m-text-thin m-text-spaced m-opacity-mini">這是我的個人博客、會分享關於編程、寫作、思考相關的任何內容，希望可以給來到這兒的人有所幫助...</p>
         </div>
       </div>
       <div class="ui inverted section divider"></div>

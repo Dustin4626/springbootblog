@@ -62,7 +62,7 @@ public class BlogServiceImpl implements BlogService{
 					predicateList.add(criteriaBuilder.equal(root.<Type> get("type").get("id"), blogQuery.getTypeId()));
 				}
 				
-//				predicateList.add(criteriaBuilder.equal(root.<Boolean> get("recommend"), blogQuery.isRecommend()));
+				//	predicateList.add(criteriaBuilder.equal(root.<Boolean> get("recommend"), blogQuery.isRecommend()));
 				
 				// query.where(predicates.toArray(new Predicate[predicates.size()]));
 				Predicate[] pre = new Predicate[predicateList.size()];
@@ -135,9 +135,7 @@ public class BlogServiceImpl implements BlogService{
 			throw new NotFoundException("not found blog");
 		}
 		blog.setViews(blog.getViews() + 1);
-		
 		dao.save(blog);//有沒有加這行都會update blog
-		
 		return blog;
 	}
 }

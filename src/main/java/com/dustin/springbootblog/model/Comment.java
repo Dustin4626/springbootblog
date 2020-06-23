@@ -127,10 +127,5 @@ public class Comment implements Serializable {
 		this.replyComments = replyComments;
 	}
 
-	@Override
-	public String toString() {
-		return "Comment [id=" + id + ", adminComment=" + adminComment + ", avatar=" + avatar + ", content=" + content + ", createTime=" + createTime + ", email=" + email + ", nickname=" + nickname
-				+ ", blog=" + blog + "]";
-	}
 
 }
