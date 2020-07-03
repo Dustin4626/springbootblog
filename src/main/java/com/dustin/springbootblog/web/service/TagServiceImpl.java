@@ -1,6 +1,5 @@
 package com.dustin.springbootblog.web.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.dustin.springbootblog.model.Blog;
 import com.dustin.springbootblog.model.Tag;
 import com.dustin.springbootblog.web.dao.TagRepository;
 
@@ -51,9 +51,9 @@ public class TagServiceImpl implements TagService {
 	}
 
 	@Override
-	public Page<Tag> listTagTop(int i) {
-		Pageable pageable = PageRequest.of(0, i, Sort.by("id").descending());
-		return dao.findAll(pageable);
+	public List<Tag> listTagTop(int i) {
+		Pageable pageable = PageRequest.of(0, i, Sort.by("blogs.size").descending());
+		return dao.findTop(pageable);
 	}
 
 }

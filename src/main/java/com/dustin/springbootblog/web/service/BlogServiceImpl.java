@@ -3,9 +3,7 @@ package com.dustin.springbootblog.web.service;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -137,5 +135,15 @@ public class BlogServiceImpl implements BlogService{
 		blog.setViews(blog.getViews() + 1);
 		dao.save(blog);//有沒有加這行都會update blog
 		return blog;
+	}
+
+	@Override
+	public Page<Blog> getBlogByTagId(String tagId, Pageable pageable) {
+		return dao.getBlogByTagId(tagId, pageable);
+	}
+
+	@Override
+	public Page<Blog> searchByQuery(String query, Pageable pageable) {
+		return dao.searchByQuery(query, pageable);
 	}
 }

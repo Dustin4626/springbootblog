@@ -18,10 +18,14 @@ public interface BlogService {
 	void save(Blog blog);
 
 	Blog getBlog(String id);
-	
+
 	void delete(String id);
 
 	Page<Blog> listRecommendBlogTop(int i);
 
 	Blog getBlogByIdAndUpdateViewCount(String id);
+
+	Page<Blog> getBlogByTagId(String tagId, Pageable pageable);
+
+	Page<Blog> searchByQuery(String query, Pageable pageable);
 }
