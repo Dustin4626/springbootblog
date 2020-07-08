@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_fragments :: head(title='文件上傳範例')}"></head>
+<meta charset="UTF-8">
+</head>
+<body>
+
+	<nav th:replace="~{admin/_layout :: navbar}">..</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<nav th:replace="~{admin/_layout :: sidebar(active='upload.html')}"></nav>
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+			<h2>文件上傳範例</h2>
+			<th:block th:replace="admin/_layout :: message"></th:block>
+			<div class="table-responsive">
+				<form th:action="@{/admin/upload}" method="post" enctype="multipart/form-data">
+				  <div class="form-group">
+				    <label>文件上傳</label>
+				    <input type="file" name="file" class="form-control-file">
+				    <input type="submit">
+				  </div>
+				</form>
+			</div>
+			
+			<div class="table-responsive">
+				<form th:action="@{/admin/uploadMultiFile}" method="post" enctype="multipart/form-data">
+				  <div class="form-group">
+				    <label>多檔文件上傳</label>
+				    <input type="file" name="file" class="form-control-file">
+				    <input type="file" name="file" class="form-control-file">
+				    <input type="file" name="file" class="form-control-file">
+				    <input type="submit">
+				  </div>
+				</form>
+			</div>
+			</main>
+		</div>
+	</div>
+	
+	<th:block th:replace="admin/_layout :: script"></th:block>
+</body>
+</html>

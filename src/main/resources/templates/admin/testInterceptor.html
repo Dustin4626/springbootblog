@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_fragments :: head(title='攔截器範例')}"></head>
+<meta charset="UTF-8">
+</head>
+<body>
+
+	<nav th:replace="~{admin/_layout :: navbar}">..</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<nav th:replace="~{admin/_layout :: sidebar(active='testInterceptor.html')}"></nav>
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+				<h2>多攔截器範例</h2>
+			</main>
+		</div>
+	</div>
+	
+	<th:block th:replace="admin/_layout :: script"></th:block>
+</body>
+</html>

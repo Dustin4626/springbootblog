@@ -1,16 +1,15 @@
 package com.dustin.springbootblog.config;
 
-import java.util.Properties;
-
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.dustin.springbootblog.interceptor.FirstInterceptor;
+import com.dustin.springbootblog.interceptor.SecondInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer{
@@ -25,6 +24,14 @@ public class WebConfig implements WebMvcConfigurer{
 //		registry.addInterceptor(new LoginInterceptor())
 //				.addPathPatterns("/admin/**")
 //				.excludePathPatterns("/admin","/admin/login");
+		
+		/**
+		 * 多攔截器範例
+		 */
+		registry.addInterceptor(new FirstInterceptor())
+				.addPathPatterns("/admin/testInterceptor");
+		registry.addInterceptor(new SecondInterceptor())
+				.addPathPatterns("/admin/upload", "/admin/testInterceptor");
 	}
 
 	@Bean
