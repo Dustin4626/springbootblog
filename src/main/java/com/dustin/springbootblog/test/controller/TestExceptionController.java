@@ -11,6 +11,19 @@ import com.dustin.springbootblog.exception.UserNotExistException;
 /**
  * 異常處理測試範例
  * 
+ * rest api call get mehtod testException/{id}
+ * ->throw new "UserNotExistException"->"TestExceptionHandler" catch exception
+ * ->request.setAttribute status_code 5xx or 4xx
+ * ->可以存放HashMap錯誤訊息至request Attribute
+ * ->then forward:/error
+ * 
+ * ps:forward:/error will handler by "BasicErrorController(spring officail)",
+ * it will judge request is by html or other like rest api,
+ * and forward to JSON/HTML;
+ * 
+ * ->extends DefaultErrorAttributes ->"MyErrorAttributes"(for stored customize error message)
+ * ->WebRequest get Attribute error message object and stored in super.getErrorAttributes
+ * 
  * @author dustinxie
  *
  */

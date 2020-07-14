@@ -9,7 +9,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dustin.springbootblog.exception.UserNotExistException;
 
@@ -37,7 +36,9 @@ public class TestExceptionHandler {
 		request.setAttribute("javax.servlet.error.status_code", 500);
 		map.put("code", "user.notexist");
 		map.put("message", e.getMessage());
-		// 转发到/error
+		request.setAttribute("ext", map);
+		
+		// 轉發到/error
 		return "forward:/error";
 	}
 }
