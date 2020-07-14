@@ -14,11 +14,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * 	寄信範例
+ * 	1.register JavaMailSender use java config (WebConfig.java) or application.properties
+ * 	2.@Autowired JavaMailSender and run the service like below
+ * 
+ * ex:
+ * use application.properties:
+ * spring.mail.default-encoding=UTF-8
+ * spring.mail.host=172.16.9.21
+ * spring.mail.port=25
+ * spring.mail.properties.mail.smtp.auth=false
+ * spring.mail.properties.mail.smtp.ehlo=false
+ * spring.mail.properties.mail.debug=false
+ * 
+ * @author dustinxie
+ *
+ */
 @Controller
 public class SendMailController {
 
 //	set init in application.properties or java config (WebConfig.java)
-//	@Autowired
+	@Autowired
 	public JavaMailSender emailSender;
 
 	@GetMapping("mail")
